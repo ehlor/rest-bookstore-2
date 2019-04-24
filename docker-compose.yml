@@ -5,8 +5,6 @@ bookstore:
     - "80:80"
   volumes:
     - .:/code
-  links:
-    - notes
 notes:
   build: ./notes
   command: python app.py
