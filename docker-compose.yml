@@ -1,0 +1,17 @@
+bookstore:
+  build: ./bookstore
+  command: java -jar target/gs-rest-service-0.1.0.jar --server.port=80
+  ports:
+    - "80:80"
+  volumes:
+    - .:/code
+  links:
+    - notes
+notes:
+  build: ./notes
+  command: python app.py
+  ports:
+    - "80:5000"
+  volumes:
+    - .:/code
+	
