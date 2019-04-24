@@ -11,6 +11,6 @@ notes:
   build: ./notes
   command: python app.py
   ports:
-    - "80:5000"
+    - "5000:5000"
   volumes:
     - .:/code
