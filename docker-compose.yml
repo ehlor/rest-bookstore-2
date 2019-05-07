@@ -1,6 +1,6 @@
 bookstore:
   build: ./bookstore
-  command: java -jar bookstore/target/gs-rest-service-0.1.0.jar --server.port=80
+  command: java -jar code/target/gs-rest-service-0.1.0.jar --server.port=80
   ports:
     - "80:80"
   volumes:
