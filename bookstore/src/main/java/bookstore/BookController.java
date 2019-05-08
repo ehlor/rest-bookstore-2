@@ -49,7 +49,7 @@ public class BookController {
                     }
                 }
             }
-            else return new ResponseEntity<Response>(new Response("failure", "A review with this title already exists"), HttpStatus.BAD_REQUEST);
+            else return new ResponseEntity<Response>(new Response("failure", "Bad request or a review with this title already exists"), HttpStatus.BAD_REQUEST);
             HttpHeaders headers = headerBuilder(b, bookAccess.getBook(oid).getId());
             return new ResponseEntity<Response>(new Response("success", "Book review added"), headers, HttpStatus.OK);
         }
@@ -57,10 +57,10 @@ public class BookController {
     }
 
     @RequestMapping(value = "/books/{id}/reviews", method = RequestMethod.GET)
-    public ResponseEntity<Object> getBookReviews(@PathVariable(value="id") int id) throws IOException {
+    public ResponseEntity<List<JsonNode>> getBookReviews(@PathVariable(value="id") int id) throws IOException {
         Book book = bookAccess.getBook(id);
-        if(book == null) return new ResponseEntity<Object>(book, HttpStatus.NOT_FOUND);
         List<JsonNode> reviews = new ArrayList<JsonNode>();
+        if(book == null) return new ResponseEntity<List<JsonNode>>(reviews, HttpStatus.NOT_FOUND);
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
         ResponseEntity<String> response;
@@ -71,7 +71,7 @@ public class BookController {
             data = root.path("data");
             reviews.add(data);
         }
-        return new ResponseEntity<Object>(reviews, HttpStatus.OK);
+        return new ResponseEntity<List<JsonNode>>(reviews, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/books", method = RequestMethod.GET)
