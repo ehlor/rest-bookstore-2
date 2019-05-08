@@ -3,15 +3,11 @@
 Web serviso paleidimas Docker aplinkoje:
 1. Klonuojam git repozitoriją
 ```
-git clone https://github.com/theelo/rest-bookstore.git
+git clone https://github.com/theelo/rest-bookstore-2.git
 ```
-2. Kuriam image failą
+2. Paleidžiam konteinerius
 ```
-docker build -t bookstore .
-```
-3. Paleidžiam konteinerį su web servisu
-```
-docker run -d -p 5000:5000 bookstore
+docker-compose up
 ```
 Funkcijos:
 
@@ -20,6 +16,8 @@ Funkcijos:
 Gauti visas knygas ```/books```
 
 Gauti knygą pagal id ```/books/{id}```
+
+(2 lab.) Gauti visus knygos atsiliepimus ```/books/{id}/reviews```
 
 **POST**
 
@@ -32,6 +30,13 @@ Redaguoti knygą ```/books/{id}```
 **PATCH**
 
 Redaguoti knygos dalį ```/books/{id}```
+
+(2 lab.) Įkelti knygos atsiliepimą ```/books/{id}/reviews```
+
+  Pvz.: ```{"title": "Nauja knyga - naujas nusivylimas"
+            "author": "Antanas V.",
+            "comment": "Bla bla bla bla bla bla bla.",
+            "expiration": "2019-04-01"}```
 
 **DELETE**
 
