@@ -34,7 +34,7 @@ public class BookController {
         List<Book> bookList = bookAccess.getAllBooks();
         if(bookAccess.getBook(oid) != null){
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.postForEntity("http://notes:5000/notes/", review, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity("http://notes:5000/notes", review, String.class);
             if(response.getStatusCodeValue() == 201){
                 // get title
                 ObjectMapper mapper = new ObjectMapper();
@@ -66,7 +66,7 @@ public class BookController {
         JsonNode root, data;
         if(book == null) return new ResponseEntity<Object>(book, HttpStatus.NOT_FOUND);
         for(String title : book.getReviewList()){
-            response = restTemplate.getForEntity("http://notes:5000/notes/" + title, String.class);
+            response = restTemplate.getForEntity("http://notes:5000/notes" + title, String.class);
             root = mapper.readTree(response.getBody());
             data = root.path("data");
             reviews.add(data.toString());
