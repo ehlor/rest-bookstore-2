@@ -31,12 +31,7 @@ Redaguoti knygą ```/books/{id}```
 
 Redaguoti knygos dalį ```/books/{id}```
 
-(2 lab.) Įkelti knygos atsiliepimą ```/books/{id}/reviews```
-
-  Pvz.: ```{"title": "Nauja knyga - naujas nusivylimas"
-            "author": "Antanas V.",
-            "comment": "Bla bla bla bla bla bla bla.",
-            "expiration": "2019-04-01"}```
+(2 lab.) Įkelti knygos atsiliepimą ```/books/{id}/reviews``` Pvz.: ```{"title":"Nauja knyga - naujas nusivylimas","author":"Antanas V.","comment":"Bla bla bla bla bla bla bla.", "expiration":"2019-04-01"}```
 
 **DELETE**
 
