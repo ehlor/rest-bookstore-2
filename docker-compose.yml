@@ -8,5 +8,6 @@ notes:
   command: python notes/app.py
   ports:
     - "5000:5000"
+  container_name: notes
   volumes:
     - .:/code
