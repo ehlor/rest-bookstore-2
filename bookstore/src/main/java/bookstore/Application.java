@@ -13,6 +13,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 public class Application{
@@ -20,6 +23,7 @@ public class Application{
     @PostConstruct
     private void init(){
         List<Book> bookList = null;
+        RestTemplate restTemplate = new RestTemplate();
         try{
             File file = new File("Books.dat");
             if(!file.exists()){
@@ -27,6 +31,23 @@ public class Application{
                 Book book2 = new Book(8000, "J. R. R. Tolkien", "The Lord of the Rings", "Fantasy");
                 Book book3 = new Book(9000, "Harper Lee", "To Kill a Mockingbird", "Southern Gothic Fiction");
                 Book book4 = new Book(555, "Jane Austen", "Pride and Prejudice", "Comedy");
+                
+                String jsonString1 = "{\"title\":\"Nauja knyga - naujas nusivylimas\",\"author\":\"Antanas V.\",\"comment\":\"Bla bla bla bla bla bla bla.\",\"expiration\":\"2019-04-01\"}";
+                String jsonString2 = "{\"title\":\"Nauja knyga\",\"author\":\"Antanas V.\",\"comment\":\"Bla bla bla bla bla bla bla.\",\"expiration\":\"2019-04-01\"}";
+                String jsonString3 = "{\"title\":\"Knyga\",\"author\":\"Antanas V.\",\"comment\":\"Bla bla bla bla bla bla bla.\",\"expiration\":\"2019-04-01\"}";
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode actualObj1 = mapper.readTree(jsonString1);
+                JsonNode actualObj2 = mapper.readTree(jsonString2);
+                JsonNode actualObj3 = mapper.readTree(jsonString3);
+                restTemplate.postForEntity("http://notes:5000/notes", actualObj1, String.class);
+                restTemplate.postForEntity("http://notes:5000/notes", actualObj2, String.class);
+                restTemplate.postForEntity("http://notes:5000/notes", actualObj3, String.class);
+                book2.addToReviewList("Nauja knyga - naujas nusivylimas");
+                book2.addToReviewList("Nauja knyga");
+                book2.setReviewCount(book.getReviewCount()+2);
+                book3.addToReviewList("Knyga");
+                book3.setReviewCount(book.getReviewCount()+1);
+                
                 bookList = new ArrayList<Book>();
                 bookList.add(book1);
                 bookList.add(book2);
