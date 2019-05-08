@@ -44,9 +44,9 @@ public class Application{
                 restTemplate.postForEntity("http://notes:5000/notes", actualObj3, String.class);
                 book2.addToReviewList("Nauja knyga - naujas nusivylimas");
                 book2.addToReviewList("Nauja knyga");
-                book2.setReviewCount(book.getReviewCount()+2);
+                book2.setReviewCount(book2.getReviewCount()+2);
                 book3.addToReviewList("Knyga");
-                book3.setReviewCount(book.getReviewCount()+1);
+                book3.setReviewCount(book3.getReviewCount()+1);
                 
                 bookList = new ArrayList<Book>();
                 bookList.add(book1);
