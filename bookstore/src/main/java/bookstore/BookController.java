@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -79,6 +80,24 @@ public class BookController {
         List<Book> bookList = bookAccess.getAllBooks();
         if(bookList.isEmpty()) return new ResponseEntity<List<Book>>(bookList, HttpStatus.NO_CONTENT);
         else return new ResponseEntity<List<Book>>(bookList, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/books", params = "embedded", method = RequestMethod.GET)
+    public ResponseEntity<List<Book>> getBooksEmbedded(@RequestParam("embedded") String embedded){
+        if(embedded.equals("reviews"){
+            List<Book> bookList = bookAccess.getAllBooks();
+            JsonNode node;
+            List<JsonNode> result = new ArrayList<JsonNode>;
+            if(bookList.isEmpty()) return new ResponseEntity<List<Book>>(bookList, HttpStatus.NO_CONTENT);
+            else{
+                for(Book book : bookList){
+                    node = mapper.convertValue(book, JsonNode.class);
+                    ((ObjectNode)node).putArray("reviews").add(getBookReviews(book.getId()));
+                    result.add(node);
+                }
+                return new ResponseEntity<List<JsonNode>>(result, HttpStatus.OK);
+            }
+        }
     }
 
     @RequestMapping(value = "/books/{id}", method = RequestMethod.GET)
