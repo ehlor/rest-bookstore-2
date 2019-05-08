@@ -32,14 +32,14 @@ public class Application{
                 bookList.add(book2);
                 bookList.add(book3);
                 bookList.add(book4);
-                saveBookList(bookList);
+                FileOutputStream fos = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(bookList);
+                oos.close();
             }
-            else{
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                bookList = (List<Book>) ois.readObject();
-                ois.close();
-            }
+        }
+        catch(FileNotFoundException e){
+            e.printStackTrace();
         }
         catch(IOException e){
             e.printStackTrace();
