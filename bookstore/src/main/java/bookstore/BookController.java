@@ -69,7 +69,7 @@ public class BookController {
             response = restTemplate.getForEntity("http://notes:5000/notes/" + title, String.class);
             root = mapper.readTree(response.getBody());
             data = root.path("data");
-            reviews.add(data.toString());
+            reviews.add(data);
         }
         return new ResponseEntity<Object>(reviews, HttpStatus.OK);
     }
