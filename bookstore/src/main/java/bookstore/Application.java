@@ -44,9 +44,6 @@ public class Application{
         catch(IOException e){
             e.printStackTrace();
         }
-        catch(ClassNotFoundException e){
-            e.printStackTrace();
-        }
     }
     
     public static void main(String[] args) {
