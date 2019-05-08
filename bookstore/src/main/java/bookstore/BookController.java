@@ -35,6 +35,7 @@ public class BookController {
         if(bookAccess.getBook(oid) != null){
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> response = restTemplate.postForEntity("http://notes:5000/notes", review, String.class);
+            System.out.println(response.toString());
             if(response.getStatusCodeValue() == 201){
                 // get title
                 ObjectMapper mapper = new ObjectMapper();
