@@ -84,7 +84,7 @@ public class BookController {
     
     @RequestMapping(value = "/books", params = "embedded", method = RequestMethod.GET)
     public ResponseEntity<List<Book>> getBooksEmbedded(@RequestParam("embedded") String embedded){
-        if(embedded.equals("reviews"){
+        if(embedded.equals("reviews")){
             List<Book> bookList = bookAccess.getAllBooks();
             JsonNode node;
             List<JsonNode> result = new ArrayList<JsonNode>;
