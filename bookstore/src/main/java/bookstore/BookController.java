@@ -66,7 +66,7 @@ public class BookController {
         JsonNode root, data;
         if(book == null) return new ResponseEntity<Object>(book, HttpStatus.NOT_FOUND);
         for(String title : book.getReviewList()){
-            response = restTemplate.getForEntity("http://notes:5000/notes" + title, String.class);
+            response = restTemplate.getForEntity("http://notes:5000/notes/" + title, String.class);
             root = mapper.readTree(response.getBody());
             data = root.path("data");
             reviews.add(data.toString());
