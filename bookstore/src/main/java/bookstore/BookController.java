@@ -59,12 +59,12 @@ public class BookController {
     @RequestMapping(value = "/books/{id}/reviews", method = RequestMethod.GET)
     public ResponseEntity<Object> getBookReviews(@PathVariable(value="id") int id) throws IOException {
         Book book = bookAccess.getBook(id);
-        List<String> reviews = new ArrayList<String>();
+        if(book == null) return new ResponseEntity<Object>(book, HttpStatus.NOT_FOUND);
+        List<JsonNode> reviews = new ArrayList<JsonNode>();
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
         ResponseEntity<String> response;
         JsonNode root, data;
-        if(book == null) return new ResponseEntity<Object>(book, HttpStatus.NOT_FOUND);
         for(String title : book.getReviewList()){
             response = restTemplate.getForEntity("http://notes:5000/notes/" + title, String.class);
             root = mapper.readTree(response.getBody());
