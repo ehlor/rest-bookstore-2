@@ -14,6 +14,7 @@ public class BookAccess{
 
     public List<Book> getAllBooks(){
         List<Book> bookList = null;
+        File file = new File("Books.dat");
         try{
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
