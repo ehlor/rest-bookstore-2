@@ -17,10 +17,6 @@ services:
       - "80:80"
     networks:
       test:
-    depends_on:
-      - notes
-    links:
-      - notes
 
 networks:
   test:
