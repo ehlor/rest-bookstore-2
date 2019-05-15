@@ -14,26 +14,12 @@ public class BookAccess{
 
     public List<Book> getAllBooks(){
         List<Book> bookList = null;
+        File file = new File("Books.dat");
         try{
-            File file = new File("Books.dat");
-            if(!file.exists()){
-                Book book1 = new Book(12340, "George Orwell", "1984", "Post-Apocalyptic Fiction");
-                Book book2 = new Book(8000, "J. R. R. Tolkien", "The Lord of the Rings", "Fantasy");
-                Book book3 = new Book(9000, "Harper Lee", "To Kill a Mockingbird", "Southern Gothic Fiction");
-                Book book4 = new Book(555, "Jane Austen", "Pride and Prejudice", "Comedy");
-                bookList = new ArrayList<Book>();
-                bookList.add(book1);
-                bookList.add(book2);
-                bookList.add(book3);
-                bookList.add(book4);
-                saveBookList(bookList);
-            }
-            else{
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                bookList = (List<Book>) ois.readObject();
-                ois.close();
-            }
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            bookList = (List<Book>) ois.readObject();
+            ois.close();
         }
         catch(IOException e){
             e.printStackTrace();
