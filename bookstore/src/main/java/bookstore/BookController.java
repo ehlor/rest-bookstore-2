@@ -1,6 +1,7 @@
 package bookstore;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class BookController {
         List<Book> bookList = bookAccess.getAllBooks();
         if(bookAccess.getBook(oid) != null){
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.postForEntity("http://notes:5000/notes", review, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:5000/notes", review, String.class);
             if(response.getStatusCodeValue() == 201){
                 // get title
                 ObjectMapper mapper = new ObjectMapper();
@@ -66,7 +67,7 @@ public class BookController {
         ResponseEntity<String> response;
         JsonNode root, data;
         for(String title : book.getReviewList()){
-            response = restTemplate.getForEntity("http://notes:5000/notes/" + title, String.class);
+            response = restTemplate.getForEntity("http://localhost:5000/notes/" + title, String.class);
             root = mapper.readTree(response.getBody());
             data = root.path("data");
             reviews.add(data);
@@ -83,24 +84,47 @@ public class BookController {
     
     @RequestMapping(value = "/books", params = "embedded", method = RequestMethod.GET)
     public ResponseEntity<List<JsonNode>> getBooksEmbedded(@RequestParam("embedded") String embedded) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
         if(embedded.equals("reviews")){
             List<Book> bookList = bookAccess.getAllBooks();
             JsonNode node;
             List<JsonNode> result = new ArrayList<JsonNode>();
-            ObjectMapper mapper = new ObjectMapper();
+            mapper = new ObjectMapper();
             if(bookList.isEmpty()) return new ResponseEntity<List<JsonNode>>(result, HttpStatus.NO_CONTENT);
             else{
                 for(Book book : bookList){
-                    node = mapper.convertValue(book, JsonNode.class);
-                    List<JsonNode> bookReviews = getBookReviews(book.getId()).getBody();
-                    ArrayNode array = mapper.valueToTree(bookReviews);
-                    ((ObjectNode) node).putArray("reviews").addAll(array);
-                    result.add(node);
+                    try{
+                        node = mapper.convertValue(book, JsonNode.class);
+                        List<JsonNode> bookReviews = getBookReviews(book.getId()).getBody();
+                        ArrayNode array = mapper.valueToTree(bookReviews);
+                        ((ObjectNode) node).putArray("reviews").addAll(array);
+                        result.add(node);
+                    }
+                    catch(Exception e){
+                        List<Book> booklist = getBooks().getBody();
+                        List<JsonNode> res = new ArrayList<JsonNode>();
+                        JsonNode n;
+                        for(Book bk : booklist){
+                            n = mapper.valueToTree(bk);
+                            ((ObjectNode) n).put("reviews_error", "Could not fetch data from server.");
+                            res.add(n);
+                        }
+                        return new ResponseEntity<List<JsonNode>>(res, HttpStatus.OK);
+                    }
                 }
                 return new ResponseEntity<List<JsonNode>>(result, HttpStatus.OK);
             }
         }
-		else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		else{
+            List<Book> booklist = getBooks().getBody();
+            List<JsonNode> result = new ArrayList<JsonNode>();
+            JsonNode node;
+            for(Book book : booklist){
+                node = mapper.valueToTree(book);
+                result.add(node);
+            }
+            return new ResponseEntity<List<JsonNode>>(result, HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = "/books/{id}", method = RequestMethod.GET)
