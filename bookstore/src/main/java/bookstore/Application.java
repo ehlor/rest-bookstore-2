@@ -39,9 +39,9 @@ public class Application{
                 JsonNode actualObj1 = mapper.readTree(jsonString1);
                 JsonNode actualObj2 = mapper.readTree(jsonString2);
                 JsonNode actualObj3 = mapper.readTree(jsonString3);
-                restTemplate.postForEntity("http://notes:5000/notes", actualObj1, String.class);
-                restTemplate.postForEntity("http://notes:5000/notes", actualObj2, String.class);
-                restTemplate.postForEntity("http://notes:5000/notes", actualObj3, String.class);
+                restTemplate.postForEntity("http://localhost:5000/notes", actualObj1, String.class);
+                restTemplate.postForEntity("http://localhost:5000/notes", actualObj2, String.class);
+                restTemplate.postForEntity("http://localhost:5000/notes", actualObj3, String.class);
                 book2.addToReviewList("Nauja knyga - naujas nusivylimas");
                 book2.addToReviewList("Nauja knyga");
                 book2.setReviewCount(book2.getReviewCount()+2);
@@ -57,6 +57,18 @@ public class Application{
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                 oos.writeObject(bookList);
                 oos.close();
+            }
+            else{
+                String jsonString1 = "{\"title\":\"Nauja knyga - naujas nusivylimas\",\"author\":\"Antanas V.\",\"comment\":\"Bla bla bla bla bla bla bla.\",\"expiration\":\"2019-04-01\"}";
+                String jsonString2 = "{\"title\":\"Nauja knyga\",\"author\":\"Antanas V.\",\"comment\":\"Bla bla bla bla bla bla bla.\",\"expiration\":\"2019-04-01\"}";
+                String jsonString3 = "{\"title\":\"Knyga\",\"author\":\"Antanas V.\",\"comment\":\"Bla bla bla bla bla bla bla.\",\"expiration\":\"2019-04-01\"}";
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode actualObj1 = mapper.readTree(jsonString1);
+                JsonNode actualObj2 = mapper.readTree(jsonString2);
+                JsonNode actualObj3 = mapper.readTree(jsonString3);
+                restTemplate.postForEntity("http://localhost:5000/notes", actualObj1, String.class);
+                restTemplate.postForEntity("http://localhost:5000/notes", actualObj2, String.class);
+                restTemplate.postForEntity("http://localhost:5000/notes", actualObj3, String.class);
             }
         }
         catch(FileNotFoundException e){
