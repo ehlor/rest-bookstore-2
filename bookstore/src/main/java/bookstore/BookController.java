@@ -1,8 +1,6 @@
 package bookstore;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +19,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 @RestController
 public class BookController {
@@ -83,21 +82,25 @@ public class BookController {
     }
     
     @RequestMapping(value = "/books", params = "embedded", method = RequestMethod.GET)
-    public ResponseEntity<List<Book>> getBooksEmbedded(@RequestParam("embedded") String embedded){
+    public ResponseEntity<List<JsonNode>> getBooksEmbedded(@RequestParam("embedded") String embedded) throws IOException {
         if(embedded.equals("reviews")){
             List<Book> bookList = bookAccess.getAllBooks();
             JsonNode node;
-            List<JsonNode> result = new ArrayList<JsonNode>;
-            if(bookList.isEmpty()) return new ResponseEntity<List<Book>>(bookList, HttpStatus.NO_CONTENT);
+            List<JsonNode> result = new ArrayList<JsonNode>();
+            ObjectMapper mapper = new ObjectMapper();
+            if(bookList.isEmpty()) return new ResponseEntity<List<JsonNode>>(result, HttpStatus.NO_CONTENT);
             else{
                 for(Book book : bookList){
                     node = mapper.convertValue(book, JsonNode.class);
-                    ((ObjectNode)node).putArray("reviews").add(getBookReviews(book.getId()));
+                    List<JsonNode> bookReviews = getBookReviews(book.getId()).getBody();
+                    ArrayNode array = mapper.valueToTree(bookReviews);
+                    ((ObjectNode) node).putArray("reviews").addAll(array);
                     result.add(node);
                 }
                 return new ResponseEntity<List<JsonNode>>(result, HttpStatus.OK);
             }
         }
+		else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/books/{id}", method = RequestMethod.GET)
