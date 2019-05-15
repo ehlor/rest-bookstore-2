@@ -19,6 +19,8 @@ Gauti knygą pagal id ```/books/{id}```
 
 (2 lab.) Gauti visus knygos atsiliepimus ```/books/{id}/reviews```
 
+(2 lab.) Gauti visas knygas su atsiliepimais ```/books?embedded=reviews```
+
 **POST**
 
 Patalpinti knygą ```/books```
