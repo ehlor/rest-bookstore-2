@@ -39,9 +39,12 @@ public class Application{
                 JsonNode actualObj1 = mapper.readTree(jsonString1);
                 JsonNode actualObj2 = mapper.readTree(jsonString2);
                 JsonNode actualObj3 = mapper.readTree(jsonString3);
-                restTemplate.postForEntity("http://notes:5000/notes", actualObj1, String.class);
-                restTemplate.postForEntity("http://notes:5000/notes", actualObj2, String.class);
-                restTemplate.postForEntity("http://notes:5000/notes", actualObj3, String.class);
+                try{
+                    restTemplate.postForEntity("http://notes:5000/notes", actualObj1, String.class);
+                    restTemplate.postForEntity("http://notes:5000/notes", actualObj2, String.class);
+                    restTemplate.postForEntity("http://notes:5000/notes", actualObj3, String.class);
+                }
+                catch(Exception e){}
                 book2.addToReviewList("Nauja knyga - naujas nusivylimas");
                 book2.addToReviewList("Nauja knyga");
                 book2.setReviewCount(book2.getReviewCount()+2);
